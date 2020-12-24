@@ -47,8 +47,20 @@ class CNN(nn.Module):  # the CNN inherits from the nn module
         # realize that this is a mind-blowing number of images to deal with from these convolutions: 32*32*64.
         # next, this is how we flatten the information into a vector for feeding into the NN as input.
         # we'll have one hidden layer and an output layer
-        self.fc1 # input to hidden
-        self.fc2 # hidden to output
+        
+        # input from the gigantic vector to the hidden layer:
+        self.fc1 = nn.Linear(in_features = number_neurons, out_features = 40)
+        # in_features are the total number of pixels in the massive vector.
+        # we need to make a function to find that number; let's just drop a placeholder in there for the moment.
+        # outfeatures are the number of neurons in the hidden layer; we can select this.
+
+        # hidden to output layer (reflective of the Q values associated with actions):
+        self.fc2 = nn.Linear(in_features=40, out_features=number_actions)
+        # Logically, it's 40 from fc1 (that's easy).
+        # Each output neuron corresponds to one Q value.
+        # Each Q value corresponds to one possible action.
+        # we have passed this exact figure in as number_actions into the function.
+        
 
 
 # Building the body
