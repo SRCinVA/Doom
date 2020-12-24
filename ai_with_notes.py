@@ -32,9 +32,19 @@ class CNN(nn.Module):  # the CNN inherits from the nn module
         
         # now we'll define 5 variables: 3 for convolutional layers, and 2 for the hidden layers             
         # these layers are the AI's eyes into the environment and how it will govern its behavior while in the game.
-        self.convolution1 # strange how "self." is immediately in the variable name.
-        self.convolution2 # this builds on layer 1 and reinforces it
-        self.convolution3 # this generates even more details from the previous layers
+        self.convolution1 = nn.Conv2d(in_channels = 1, out_channels = 32, kernel_size=5) # strange how "self." is immediately in the variable name.
+                                                                                # Conv2d is built into nn
+                                                                                # you need 3 in-channels when dealing with colors; just 1 for B&W.
+                                                                                # out-channels is equal to the number of features you want to detect in your original images. 
+                                                                                # 32 is the norm; from the original, it will produce 32 images with detected features
+                                                                                # kernel size = the dimensions of the square that will go through the original image.
+                                                                                # for the first one, we'll use 5*5 feature detector, which will decrease through the next convolutional layers.
+        # this builds on layer 1 and reinforces it
+        self.convolution2 = nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3) # we'll stick with 32 new images, like before. Then we'll reduce the kernel size.
+        
+        # this generates even more details from the previous layers. We'll switch to 64 from 32. This is a classic pattern.
+        self.convolution3 = nn.Conv2d(in_channels=32, out_channels=64, kernel_size=2)
+        # realize that this is a mind-blowing number of images to deal with from these convolutions: 32*32*64.
         # next, this is how we flatten the information into a vector for feeding into the NN as input.
         # we'll have one hidden layer and an output layer
         self.fc1 # input to hidden
