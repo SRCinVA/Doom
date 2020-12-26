@@ -61,7 +61,12 @@ class CNN(nn.Module):  # the CNN inherits from the nn module
         # Each Q value corresponds to one possible action.
         # we have passed this exact figure in as number_actions into the function.
         
-
+    def count_neurons(self, image_dim): # image_dim are the dimensions of the images coming from Doom (80*80)
+        x = Variable(torch.rand(1, *image_dim)) # we create a "fake" image here first; hard to understand his reasoning here: the batch (1) and (80*80) for the dimensions of the input image.
+                                    # this is just to help us get the final number of neurons, whether or not they would be used in Doom.
+                                    # with Variable, it is an input image of random pixels that was just converted into a torch variable
+                                    # that will go into the convolutional layers of the neural network.
+                                    # the number of neurons we want is between convol3 and fc1.
 
 # Building the body
 
