@@ -67,6 +67,13 @@ class CNN(nn.Module):  # the CNN inherits from the nn module
                                     # with Variable, it is an input image of random pixels that was just converted into a torch variable
                                     # that will go into the convolutional layers of the neural network.
                                     # the number of neurons we want is between convol3 and fc1.
+        # now we have to propogate the image into the NN to reach the flattening layer.
+        # that propogation will require 3 steps.
+        # 1.) apply the convolution to the input images; 
+        x = F.relu(F.max_pool2d(self.convolution1(x), 3, 2))  # we'll choose 3 for the kernel size, with a stride of 2 pixels.
+        # 2.) (above) apply max pooling to the convoluted images;
+        # 3.) (also above) we'll apply Relu to activate the neurons for these pooled convoluted images.
+
 
 # Building the body
 
