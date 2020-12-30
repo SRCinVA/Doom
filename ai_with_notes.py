@@ -49,7 +49,7 @@ class CNN(nn.Module):  # the CNN inherits from the nn module
         # we'll have one hidden layer and an output layer
         
         # input from the gigantic vector to the hidden layer:
-        self.fc1 = nn.Linear(in_features = number_neurons, out_features = 40)
+        self.fc1 = nn.Linear(in_features = self.count_neurons((1,80,80)), out_features = 40)
         # in_features are the total number of pixels in the massive vector.
         # we need to make a function to find that number; let's just drop a placeholder in there for the moment.
         # outfeatures are the number of neurons in the hidden layer; we can select this.
@@ -73,6 +73,23 @@ class CNN(nn.Module):  # the CNN inherits from the nn module
         x = F.relu(F.max_pool2d(self.convolution1(x), 3, 2))  # we'll choose 3 for the kernel size, with a stride of 2 pixels.
         # 2.) (above) apply max pooling to the convoluted images;
         # 3.) (also above) we'll apply Relu to activate the neurons for these pooled convoluted images.
+        
+        # now let's apply convolution 2 to "x"; then we'll mx pool it and activate its neurons.
+        # we'll choose 3 for the kernel size, with a stride of 2 pixels.
+        x = F.relu(F.max_pool2d(self.convolution2(x), 3, 2))
+
+        # now on to the third convolutional layer
+        x = F.relu(F.max_pool2d(self.convolution3(x), 3, 2))
+
+        # now on to the flattening layer: we'll take all the pixels of the 3rd convolutonal layer
+        # we'll put them into a huge vector (the flattening layer)
+        
+        # we're looking for the number of neurons in the flattening layer
+        return x.data.view(1, -1).size(1)    
+        # with size, we line up all the pixels one by one, and this will be the input of the fully connected network. 
+        # with data.view, we can see how many neurons there are.
+        
+        # with these two functions, we have (1.) architected the network and (2.) counted the neurons
 
 
 # Building the body
