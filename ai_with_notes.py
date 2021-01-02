@@ -89,8 +89,37 @@ class CNN(nn.Module):  # the CNN inherits from the nn module
         # with size, we line up all the pixels one by one, and this will be the input of the fully connected network. 
         # with data.view, we can see how many neurons there are.
         
-        # with these two functions, we have (1.) architected the network and (2.) counted the neurons
+        # with these two functions, we have (1.) architected the network and (2.) counted the neurons.
 
+    # now we need ot propogate the signal across all the layers in the NN (the forward function)
+    # we have to propogate that in the convolutional layer before the fully connected layers.
+    # we already did this in the count_neurons function, so already have this code, so we just to combine.
+    def forward(self, x): # "x" starts out as the input images, but it is updated as the signal is propagated into the NN.
+        x = F.relu(F.max_pool2d(self.convolution1(x), 3, 2))
+        x = F.relu(F.max_pool2d(self.convolution2(x), 3, 2))
+        x = F.relu(F.max_pool2d(self.convolution3(x), 3, 2))
+        # now we need to propagate the signal from the convolutional layers to 
+        # to the hidden layers and then the output layer 
+        
+        # now we have to flatten the layers
+        x = x.view(x.size(0), -1)      
+        # size(0) lines the pixels up one after another in a vector.
+        # x then transforms into the input for the fully connected layer.
+        # no explanation for the -1.
+        # the goal is to transmit it linearly, not through a convolutional function.
+        # the rectifier function breaks that linearity and helsp us uncover the non-linear relationships.
+        # we apply the fc1 to the x (which is the flattening layer at this stage).
+        # this passes the signa on linearly from flattening layer to the hidden layer.
+        # F relu (the rectifier) activates the hidden layer neurons by breaking the linearity.
+        # these steps turn x into the hidden layer.
+        x = F.relu(self.fc1(x))
+        # now we need to propagate the signal from the hidden layer to the output layer.
+        # we take the fc2 and apply it to the neurons of the hidden layer (which is x, of course)
+        # this turns x from the nuerons of the hidden layer into the output layer nuerons (containing the Q values).
+        x = self.fc2(x)
+        # lastly, we have to return x (the output neurons containing the Q values).
+        return x
+        # with this last step, we have made a brain for the AI
 
 # Building the body
 
